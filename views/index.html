@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roger's Upload Hub</title>
+    <!-- Local Bootstrap CSS -->
+    <link href="/public/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom media query for navbar to be responsive below 400px */
+        body{
+            margin: 0 16px;
+        }
+        a{
+            cursor: pointer;
+        }
+        @media (max-width: 400px) {
+            .navbar-toggler {
+                display: block;
+            }
+            .navbar-collapse {
+                display: none;
+            }
+            .navbar-collapse.show {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <!-- Send Data Pages Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Send Data Pages
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#">Upload single page</a>
+                        <a class="dropdown-item" href="#">Upload multiple page</a>
+                    </div>
+                </li>
+                <!-- Fetch Data Pages Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Fetch Data Pages
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
+                        <a class="dropdown-item" href="#">Random image from server</a>
+                        <a class="dropdown-item" href="#">Multiple random images from server</a>
+                        <a class="dropdown-item" href="#">Gallery page</a>
+                        <a class="dropdown-item" href="#">Gallery page with pagination</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/credits">Credits</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1>Roger's File & Image Upload Hub</h1>
+        <p>Select an option from the navigation menu at the top.</p>
+    </div>
+
+    <!-- Local jQuery and Bootstrap JS -->
+    <script src="/public/js/jquery-3.5.1.min.js"></script>
+    <script src="/public/js/popper.min.js"></script>
+    <!-- This worked too, but im keeping the files separated because gitignore removes node modules -->
+     <!-- <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script> -->
+    <script src="/public/js/bootstrap.min.js"></script>
+</body>
+</html>
