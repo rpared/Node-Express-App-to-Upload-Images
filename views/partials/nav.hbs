@@ -1,0 +1,63 @@
+<nav class="navbar navbar-expand-lg navbar-light nav-background">
+  <a class="navbar-brand" href="/"> <img class="logo" src="../public/images/Logo.png" alt="Sweet Uploads"></a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarNavDropdown"
+    aria-controls="navbarNavDropdown"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <!-- Send Data Pages Dropdown -->
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdownMenuLink"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          Send Images
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/upload-singleimage">Upload single
+            image</a>
+          <a class="dropdown-item" href="/upload-multipleimages">Upload multiple
+            images</a>
+        </div>
+      </li>
+      <!-- Fetch Data Pages Dropdown -->
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdownMenuLink2"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          Fetch Data Pages
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
+          <a class="dropdown-item" href="/fetch-single">Random image from server</a>
+          <a class="dropdown-item" href="/fetch-multiple">Multiple random images
+            from server</a>
+          <a class="dropdown-item" href="/fetch-all">All images from server</a>
+          <a class="dropdown-item" href="/fetch-gallery-pagination">Gallery page
+            with pagination</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/credits">Credits</a>
+      </li>
+    </ul>
+  </div>
+</nav>

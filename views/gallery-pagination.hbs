@@ -1,0 +1,90 @@
+ <div class="container mt-5">
+    <h1>Image Gallery with Pagination</h1>
+    <p>By default 10 images are displayed per page, you may customize that.</p>
+    <label for="itemsPerPage">Images per page:</label>
+    <input type="number" id="itemsPerPage" value="10" min="1" />
+    <button class="btn btn-primary" id="loadGallery">Load Gallery</button>
+    <div id="gallery" class="gallery"></div>
+    <div id="pagination" class="pagination"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      loadDefaultPage(1); // Initial load for page 1
+      const itemsPerPageInput = document.getElementById("itemsPerPage");
+      const loadGalleryButton = document.getElementById("loadGallery");
+
+      loadGalleryButton.addEventListener("click", function () {
+        loadPage(1);
+      });
+
+      function loadDefaultPage(pageIndex) {
+        fetch(`/fetch-all/pages/${pageIndex}`)
+          .then((response) => response.json())
+          .then((data) => {
+            updateGallery(data.files);
+            updatePagination(data.page, data.totalPages);
+          })
+          .catch((error) => {
+            console.error("There was a problem with the fetch operation:", error);
+          });
+      }
+
+      function loadPage(pageIndex) {
+        const itemsPerPage = parseInt(itemsPerPageInput.value, 10) || 10;
+        fetch(`/fetch-all/pages/${pageIndex}?items_per_page=${itemsPerPage}`)
+          .then((response) => response.json())
+          .then((data) => {
+            updateGallery(data.files);
+            updatePagination(data.page, data.totalPages, itemsPerPage);
+          })
+          .catch((error) => {
+            console.error("There was a problem with the fetch operation:", error);
+          });
+      }
+
+
+      function updateGallery(files) {
+        const gallery = document.getElementById("gallery");
+        gallery.innerHTML = "";
+        for (const [key, value] of Object.entries(files)) {
+          const img = document.createElement("img");
+          img.src = `data:image/jpeg;base64,${value}`;
+          img.alt = key;
+          gallery.appendChild(img);
+        }
+      }
+
+      function updatePagination(currentPage, totalPages, itemsPerPage) {
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+
+        if (currentPage > 1) {
+          const prevLink = document.createElement("a");
+          prevLink.href = "#";
+          prevLink.textContent = "« Previous";
+          prevLink.addEventListener("click", () => loadPage(currentPage - 1, itemsPerPage));
+          pagination.appendChild(prevLink);
+        }
+
+        for (let i = 1; i <= totalPages; i++) {
+          const pageLink = document.createElement("a");
+          pageLink.href = "#";
+          pageLink.textContent = i;
+          if (i === currentPage) {
+            pageLink.classList.add("current");
+          }
+          pageLink.addEventListener("click", () => loadPage(i, itemsPerPage));
+          pagination.appendChild(pageLink);
+        }
+
+        if (currentPage < totalPages) {
+          const nextLink = document.createElement("a");
+          nextLink.href = "#";
+          nextLink.textContent = "Next »";
+          nextLink.addEventListener("click", () => loadPage(currentPage + 1, itemsPerPage));
+          pagination.appendChild(nextLink);
+        }
+      }
+    });
+  </script>

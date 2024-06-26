@@ -1,0 +1,14 @@
+<div class="container mt-5">
+  <h1>Multiple Images Upload</h1>
+  <form
+    action="/upload-multipleimages"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <label for="files">Choose files:</label>
+    <input class="choose-box" type="file" id="files" name="files" multiple required />
+    <br />
+    <button type="submit" class="btn btn-primary">Upload</button>
+  </form>
+
+</div>

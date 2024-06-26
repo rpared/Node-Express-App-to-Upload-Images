@@ -1,7 +1,75 @@
 body{
     font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
 }
-.navbar-nav{
-    background-color: aqua;
+ .logo{
+    width: 120px;
+    filter: drop-shadow(#fff);
 
+ }
+.nav-background{
+    background-image: linear-gradient(to right, rgb(241, 239, 245), rgb(210, 202, 225));
+    /* background-color: rgb(224, 220, 232); */
+    margin: 0;
+   padding-left: 25px;
+   box-shadow: inset 0 0 8px gray;
+   border-bottom: 2px solid rgb(169, 108, 226);
 }
+
+.banner{
+    height: 150px;
+}
+
+a:hover{
+    position: relative;
+    top: -1px;
+}
+
+.navbar-brand:hover{
+    color: blueviolet;
+}
+
+.choose-box{
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid rgb(202, 202, 202);
+}
+
+.btn-primary{
+    background-color: blueviolet;
+    border: none;
+}
+
+.btn-primary:hover, .btn-primary:active {
+    background-color: blueviolet;
+    opacity: 0.7;
+}
+
+.dropdown-item:hover{
+    background-color: rgb(166, 101, 226);
+    color: #fff;
+}
+
+
+/* Gallery */
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .gallery img {
+    margin: 5px;
+    max-width: 200px;
+    max-height: 200px;
+  }
+  .pagination {
+    margin-top: 20px;
+  }
+  .pagination a {
+    margin: 0 5px;
+    text-decoration: none;
+    color: #000;
+  }
+  .pagination a.current {
+    font-weight: bold;
+  }
