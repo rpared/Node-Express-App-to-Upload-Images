@@ -263,9 +263,8 @@ app.listen(PORT, () => {
 
 
 
-
+//EJS -- Embedded JavaScript templates, seems similar to handlebars DID NOT WORK FOR ME!
 // const ejs = require("ejs"); // Import EJS module
-//EJS -- Embedded JavaScript templates, seems similar to handlebars DID NOT WORK
 // Set view engine to EJS
 // app.set("views", path.join(__dirname, "views"));
 // app.set("view engine", "ejs");
