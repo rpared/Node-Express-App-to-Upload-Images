@@ -11,6 +11,8 @@ const fs = require("fs");
 const exphbs = require("express-handlebars");
 const upload = require("./middleware/multer");
 const mongoose = require("mongoose");
+const uploadRoutes = require("./routers/upload_router");
+// const fetchRouter = require("./routers/fetch_router")
 
 app.set("view engine", ".hbs");
 app.set("views", path.join(__dirname, "views"));
@@ -24,10 +26,9 @@ app.engine(
   })
 );
 
-// middleware (should be in the middleware folder, but since they are so short I'll keep em here):
+// Application level middleware
 app.use(express.urlencoded({ extended: true })); // handle normal forms -> url encoded
 app.use(express.json()); // Handle raw json data
-// catch all other requests
 
 // Serve static files from the 'public' directory, without this no styles nor libraries will be loaded!!
 app.use("/public", express.static(path.join(__dirname, "public")));
@@ -43,6 +44,8 @@ db.on("error", (err) => {
 });
 
 //ROUTES
+
+app.use("/user", uploadRoutes);
 
 app.get("/", (req, res) => {
   res.render("home", {
@@ -76,26 +79,24 @@ app
     });
   });
 
-app
-  .route("/upload-multipleimages")
-  .get((req, res) => {
-    res.render("upload-multiple.hbs", {
-      title: "Upload Multiple Images",
-    });
-  })
-  .post(upload.array("files", 15), (req, res) => {
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).send("No files uploaded.");
-    }
-    const filePaths = req.files.map((file) => file.path);
-    res
-      .status(200)
-      .render("if-upload-multiple", {
-        message: `😃 File(s) uploaded successfully to this location(s): ${filePaths.join(
-          ", "
-        )}`,
-      });
-  });
+// app
+//   .route("/upload-multipleimages")
+//   .get((req, res) => {
+//     res.render("upload-multiple.hbs", {
+//       title: "Upload Multiple Images",
+//     });
+//   })
+//   .post(upload.array("files", 15), (req, res) => {
+//     if (!req.files || req.files.length === 0) {
+//       return res.status(400).send("No files uploaded.");
+//     }
+//     const filePaths = req.files.map((file) => file.path);
+//     res.status(200).render("if-upload-multiple", {
+//       message: `😃 File(s) uploaded successfully to this location(s): ${filePaths.join(
+//         ", "
+//       )}`,
+//     });
+//   });
 
 // FETCHING ROUTES
 
