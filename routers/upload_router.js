@@ -6,7 +6,7 @@ const storage = multer.memoryStorage(); //RAM
 const upload = multer({ storage: storage });
 
 router
-  .route("/upload-multipleimages")
+  .route("/multipleimages")
   .get((req, res) => {
     res.render("upload-multiple.hbs", {
       title: "Upload Multiple Images",
@@ -35,4 +35,20 @@ router
       });
   });
 
+router
+  .route("/singleimage")
+  .get((req, res) => {
+    res.render("upload", {
+      title: "Upload Single Image",
+    });
+  })
+  .post(upload.single("file"), (req, res) => {
+    if (!req.file) {
+      return res.status(400).send("No file uploaded.");
+    }
+    res.render("if-upload-single", {
+      message:
+        `😃 File uploaded successfully to this location: ` + req.file.path,
+    });
+  });
 module.exports = router;
