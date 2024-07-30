@@ -10,9 +10,10 @@ const path = require("path");
 const fs = require("fs");
 const exphbs = require("express-handlebars");
 const upload = require("./middleware/multer");
+const mongoose = require("mongoose");
 
 app.set("view engine", ".hbs");
-app.set('views', path.join(__dirname, 'views'));
+app.set("views", path.join(__dirname, "views"));
 app.engine(
   ".hbs",
   exphbs.engine({
@@ -23,7 +24,6 @@ app.engine(
   })
 );
 
-
 // middleware (should be in the middleware folder, but since they are so short I'll keep em here):
 app.use(express.urlencoded({ extended: true })); // handle normal forms -> url encoded
 app.use(express.json()); // Handle raw json data
@@ -31,9 +31,16 @@ app.use(express.json()); // Handle raw json data
 
 // Serve static files from the 'public' directory, without this no styles nor libraries will be loaded!!
 app.use("/public", express.static(path.join(__dirname, "public")));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); //This is needed to allow the client to access the images using URLs!
+app.use("/uploads", express.static(path.join(__dirname, "uploads"))); //This is needed to allow the client to access the images using URLs!
 
-
+mongoose.connect(process.env.MONGODB_URI);
+let db = mongoose.connection;
+db.once("open", () => {
+  console.log("Connected to MongoDB");
+});
+db.on("error", (err) => {
+  console.error("DB Error:" + err);
+});
 
 //ROUTES
 
@@ -63,7 +70,10 @@ app
     if (!req.file) {
       return res.status(400).send("No file uploaded.");
     }
-    res.render("if-upload-single", {message: `😃 File uploaded successfully to this location: ` + req.file.path});
+    res.render("if-upload-single", {
+      message:
+        `😃 File uploaded successfully to this location: ` + req.file.path,
+    });
   });
 
 app
@@ -80,9 +90,11 @@ app
     const filePaths = req.files.map((file) => file.path);
     res
       .status(200)
-      .render("if-upload-multiple", {message:
-        `😃 File(s) uploaded successfully to this location(s): ${filePaths.join(", ")}`}
-      );
+      .render("if-upload-multiple", {
+        message: `😃 File(s) uploaded successfully to this location(s): ${filePaths.join(
+          ", "
+        )}`,
+      });
   });
 
 // FETCHING ROUTES
@@ -127,33 +139,34 @@ app.get("/fetch-multiple2", (req, res) => {
   let numImages = parseInt(req.query.num) || 3; // Default to 3 images
 
   if (numImages < 1 || numImages > 10) {
-      return res.status(400).send({
-          message: "Invalid number of images. Please request between 2 and 10 images.",
-      });
+    return res.status(400).send({
+      message:
+        "Invalid number of images. Please request between 2 and 10 images.",
+    });
   }
 
   let uploads = fs.readdirSync(upload_dir);
   if (uploads.length === 0) {
-      return res.status(503).send({
-          message: "There are no images, upload some.",
-      });
+    return res.status(503).send({
+      message: "There are no images, upload some.",
+    });
   }
 
   if (uploads.length < numImages) {
-      numImages = uploads.length; // Adjust to available images
+    numImages = uploads.length; // Adjust to available images
   }
 
   let randomIndexes = [];
   while (randomIndexes.length < numImages) {
-      let randomIndex = Math.floor(Math.random() * uploads.length);
-      if (!randomIndexes.includes(randomIndex)) {
-          randomIndexes.push(randomIndex);
-      }
+    let randomIndex = Math.floor(Math.random() * uploads.length);
+    if (!randomIndexes.includes(randomIndex)) {
+      randomIndexes.push(randomIndex);
+    }
   }
 
   let selectedImages = [];
   for (let index of randomIndexes) {
-      selectedImages.push("/uploads/" + uploads[index]); // Relative URL
+    selectedImages.push("/uploads/" + uploads[index]); // Relative URL
   }
 
   res.json(selectedImages);
@@ -170,30 +183,28 @@ app.route("/fetch-all").get((req, res) => {
 app.get("/fetch-all2", (req, res) => {
   let upload_dir = path.join(__dirname, "uploads");
 
-   let uploads = fs.readdirSync(upload_dir);
+  let uploads = fs.readdirSync(upload_dir);
   if (uploads.length === 0) {
-      return res.status(503).send({
-          message: "There are no images, upload some.",
-      });
+    return res.status(503).send({
+      message: "There are no images, upload some.",
+    });
   }
 
-   let randomIndexes = [];
+  let randomIndexes = [];
   while (randomIndexes.length < uploads.length) {
-      let randomIndex = Math.floor(Math.random() * uploads.length);
-      if (!randomIndexes.includes(randomIndex)) {
-          randomIndexes.push(randomIndex);
-      }
+    let randomIndex = Math.floor(Math.random() * uploads.length);
+    if (!randomIndexes.includes(randomIndex)) {
+      randomIndexes.push(randomIndex);
+    }
   }
 
   let selectedImages = [];
   for (let index of randomIndexes) {
-      selectedImages.push("/uploads/" + uploads[index]); // Relative URL
+    selectedImages.push("/uploads/" + uploads[index]); // Relative URL
   }
 
   res.json(selectedImages);
 });
-
-
 
 // Fetching Paginated Gallery
 // Serve gallery-pagination.hbs
@@ -246,22 +257,12 @@ const getAllFiles = () => {
   return fileContents;
 };
 
-
-
-
-
-
 app.use((req, res) => {
   res.status(404).send("Route not found 😕");
 });
 app.listen(PORT, () => {
   console.log(`http://localhost:${PORT}`);
 });
-
-
-
-
-
 
 //EJS -- Embedded JavaScript templates, seems similar to handlebars DID NOT WORK FOR ME!
 // const ejs = require("ejs"); // Import EJS module
