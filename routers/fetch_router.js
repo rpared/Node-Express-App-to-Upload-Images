@@ -3,15 +3,15 @@ const router = express.Router();
 const Image = require("../models/file");
 const multer = require("multer");
 const storage = multer.memoryStorage(); //RAM
-const { getRandomFiles, getAllFiles } = require("../util/fileUtils");
-const { readFileAsBase64 } = require("../util/base64Util");
-const { paginate } = require("../util/paginationUtil"); // Import the pagination utility function
+// const { getRandomFiles, getAllFiles } = require("../util/fileUtils");
+// const { readFileAsBase64 } = require("../util/base64Util");
+// const { paginate } = require("../util/paginationUtil"); // Import the pagination utility function
 
 // Fetch file as base64
-const fetchFileAsBase64 = (filePath) => {
-  const content = readFileAsBase64(filePath);
-  return content ? { file: content } : { error: "File not found." };
-};
+// const fetchFileAsBase64 = (filePath) => {
+//   const content = readFileAsBase64(filePath);
+//   return content ? { file: content } : { error: "File not found." };
+// };
 
 // Fetch one random Image file as base64
 router.route("/fetch-single").get((req, res) => {
@@ -138,3 +138,5 @@ router.get("/fetch-all//pages/:index", (req, res) => {
       res.status(500).send("Error fetching files.");
     });
 });
+
+module.exports = router;
