@@ -14,7 +14,7 @@ const storage = multer.memoryStorage(); //RAM
 // };
 
 // Fetch one random Image file as base64
-router.route("/fetch-single").get((req, res) => {
+router.route("/single").get((req, res) => {
   res.render("fetch-single.hbs", {
     title: "Fetching a Random Image",
   });
@@ -37,7 +37,7 @@ router.get("/random-image", (req, res) => {
 
 // Fetch all images
 
-router.route("/fetch-all").get((req, res) => {
+router.route("/all").get((req, res) => {
   res.render("fetch-all.hbs", {
     title: "Fetching All Images",
   });
@@ -67,7 +67,7 @@ router.get("/fetch-all2", (req, res) => {
 
 // Fetch multiple images
 
-router.route("/fetch-multiple").get((req, res) => {
+router.route("/multiple").get((req, res) => {
   res.render("fetch-multiple.hbs", {
     title: "Fetching Multiple Random Images",
   });
@@ -90,7 +90,7 @@ router.get("/fetch-multiple2", (req, res) => {
 });
 
 // Fetch all images Paginated
-router.route("/fetch-gallery-pagination").get((req, res) => {
+router.route("/gallery-pagination").get((req, res) => {
   res.render("gallery-pagination.hbs", {
     title: "Fetching Gallery with pagination",
   });

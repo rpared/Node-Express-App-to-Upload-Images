@@ -27,8 +27,11 @@ router
     });
     Promise.all(imagePromises)
       .then(() => {
-        res.status(200).send("Files uploaded successfully.");
-      })
+        res.
+        render("if-upload-multiple", {message:
+        "😃 Files uploaded successfully to the Database."
+        });
+    })
       .catch((error) => {
         console.log(error);
         res.status(500).send("Error saving files to database.");
@@ -46,9 +49,22 @@ router
     if (!req.file) {
       return res.status(400).send("No file uploaded.");
     }
-    res.render("if-upload-single", {
-      message:
-        `😃 File uploaded successfully to this location: ` + req.file.path,
+    const newImage = new Image({
+      filename: req.file.originalname,
+      contentType: req.file.mimetype,
+      imageBuffer: req.file.buffer,
     });
-  });
+    newImage.save()
+    .then(() => {
+      res.render("if-upload-single", {
+        message:
+          `😃 File uploaded successfully to the database!` ,
+      });
+    })
+    .catch((error) => {
+      console.error(error); // Use console.error for proper error logging
+      res.status(500).send("Error saving file to database.");
+    });
+});
+
 module.exports = router;

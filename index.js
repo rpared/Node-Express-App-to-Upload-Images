@@ -65,6 +65,14 @@ app.get("/credits", (req, res) => {
   });
 });
 
+//Catch all other routes
+app.use((req, res) => {
+  res.status(404).send("Route not found 😕");
+});
+app.listen(PORT, () => {
+  console.log(`http://localhost:${PORT}`);
+});
+
 // app
 //   .route("/upload-multipleimages")
 //   .get((req, res) => {
