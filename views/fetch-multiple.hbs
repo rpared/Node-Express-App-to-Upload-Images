@@ -6,34 +6,37 @@
         <br>
         <button class="btn btn-primary" type="button" onclick="displayImages()">Display Images</button>
     </form>
-    <div id="image-container"></div>
+    <div id="imageContainer"></div>
 </div>
 
 <script>
 function displayImages() {
     let numImages = document.querySelector("#numImages").value;
-    fetch("/fetch-multiple2?num=" + numImages)  // Add num parameter to URL
-        .then((response) => {
-            if (response.ok) {
-                return response.json(); // Assuming server sends JSON (modify if different)
-            } else {
-                throw new Error("Network response was not ok");
-            }
-        })
-        .then((imageUrls) => {
-            const imageContainer = document.getElementById("image-container");
-            imageContainer.innerHTML = ""; // Clear previous content
+    fetch("/fetch/fetch-multiple2?num=" + numImages)  // Adds num parameter to URL, working yeii
+             
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          const imageContainer = document.getElementById('imageContainer');
+          imageContainer.innerHTML = ''; // Clear any existing content
+          if (Array.isArray(data) && data.length > 0) {
+            data.forEach((image) => {
+              if (image.imageBuffer) {
+                // Create an img element
+                const imgElement = document.createElement('img');
+                imgElement.src = `data:${image.contentType};base64,${image.imageBuffer}`;
+                imgElement.alt = image.filename;
+                imgElement.style.maxWidth = '200px';
+                imgElement.style.margin = '10px';
 
-            // Loop through image URLs and create image elements
-            for (const imageUrl of imageUrls) {
-                const img = document.createElement("img");
-                img.src = imageUrl;
-                img.width = 300;
-                imageContainer.appendChild(img);
-            }
+                // Append the img element to the container
+                imageContainer.appendChild(imgElement);
+              }
+            });
+          } else {
+            imageContainer.innerHTML = '<p>No images found.</p>';
+          }
         })
-        .catch((error) => {
-            console.error("There was a problem with the fetch operation:", error);
-        });
-}
-</script>
+        .catch((error) => console.error("Error fetching files:", error));
+    }
+  </script>

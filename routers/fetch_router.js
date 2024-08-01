@@ -35,6 +35,41 @@ router.get("/random-image", (req, res) => {
     });
 });
 
+// Fetch multiple images
+router.route("/multiple").get((req, res) => {
+  res.render("fetch-multiple.hbs", {
+    title: "Fetching Multiple Random Images",
+  });
+});
+//This route is triggered with js inside fetch-multiple.hbs
+router.get("/fetch-multiple2", (req, res) => {
+
+
+    let numImages = parseInt(req.query.num) || 3; // Default to 3 images
+
+  if (numImages < 1 || numImages > 10) {
+    return res.status(400).send({
+      message:
+        "Invalid number of images. Please request between 2 and 10 images.",
+    });
+  }
+
+  Image.aggregate([{ $sample: { size: numImages } }])
+    .then((randomImages) => {
+      if (randomImages.length === 0) {
+        return res.status(404).send("No files found.");
+      }
+      res.json(randomImages);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).send("Error fetching file.");
+    });
+});
+
+
+
+
 // Fetch all images
 
 router.route("/all").get((req, res) => {
@@ -65,29 +100,6 @@ router.get("/fetch-all2", (req, res) => {
     });
 });
 
-// Fetch multiple images
-
-router.route("/multiple").get((req, res) => {
-  res.render("fetch-multiple.hbs", {
-    title: "Fetching Multiple Random Images",
-  });
-});
-//This route is triggered with js inside fetch-multiple.hbs
-router.get("/fetch-multiple2", (req, res) => {
-  const count = parseInt(req.query.count) || 1;
-
-  Image.aggregate([{ $sample: { size: count } }])
-    .then((randomImages) => {
-      if (randomImages.length === 0) {
-        return res.status(404).send("No files found.");
-      }
-      res.json(randomImages);
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(500).send("Error fetching file.");
-    });
-});
 
 // Fetch all images Paginated
 router.route("/gallery-pagination").get((req, res) => {
@@ -97,7 +109,7 @@ router.route("/gallery-pagination").get((req, res) => {
 });
 
 //Triggered by script inside gallery-pagination.hbs
-router.get("/fetch-all//pages/:index", (req, res) => {
+router.get("/fetch-all/pages/:index", (req, res) => {
   const pageIndex = parseInt(req.params.index, 10);
 
   if (isNaN(pageIndex) || pageIndex < 1) {
