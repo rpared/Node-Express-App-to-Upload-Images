@@ -12,6 +12,10 @@ const ImageSchema = new mongoose.Schema({
     type: Buffer,
     required: true,
   },
+  imageBufferThumbnail: {
+    type: Buffer,
+    required: true,
+  },
   uploadDate: {
     type: Date,
     default: Date.now,

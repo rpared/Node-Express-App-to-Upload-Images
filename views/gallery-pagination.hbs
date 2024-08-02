@@ -39,25 +39,28 @@ document.addEventListener("DOMContentLoaded", function () {
         const imageContainer = document.getElementById('imageContainer');
         imageContainer.innerHTML = ''; // Clear any existing content
 
-        if (Array.isArray(data.files) && data.files.length > 0) {
-          data.files.forEach((image) => {
-            if (image.imageBuffer) {
-              const imgElement = document.createElement('img');
-              imgElement.src = `data:${image.contentType};base64,${image.imageBuffer}`;
-              imgElement.alt = image.filename;
-              imageContainer.appendChild(imgElement);
-            }
+          if (Array.isArray(data.files) && data.files.length > 0) {
+            data.files.forEach((image) => {
+              if (image.imageBuffer) {
+                // Create an img element
+                const imgElement = document.createElement('img');
+                imgElement.src = `data:${image.contentType};base64,${image.imageBuffer}`;
+                imgElement.alt = image.filename;
+
+                // Append the img element to the container
+                imageContainer.appendChild(imgElement);
+              }
           });
         } else {
           imageContainer.innerHTML = '<p>No images found.</p>';
         }
-
+        // Update pagination info and buttons
         currentPage = data.page;
         totalPages = data.totalPages;
 
         const pageInfo = document.getElementById('pageInfo');
         pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-
+        // Update pagination info and buttons
         document.getElementById('prevBtn').disabled = currentPage <= 1;
         document.getElementById('nextBtn').disabled = currentPage >= totalPages;
       })

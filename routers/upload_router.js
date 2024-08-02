@@ -4,6 +4,7 @@ const Image = require("../models/file");
 const multer = require("multer");
 const storage = multer.memoryStorage(); //RAM
 const upload = multer({ storage: storage });
+const sharp = require('sharp'); //To get thumbnails
 
 router
   .route("/multipleimages")
@@ -18,26 +19,45 @@ router
       return res.status(400).send("No files uploaded.");
     }
     const imagePromises = req.files.map((file) => {
-      const newImage = new Image({
-        filename: file.originalname,
-        contentType: file.mimetype,
-        imageBuffer: file.buffer,
-      });
-      return newImage.save();
-    });
-    Promise.all(imagePromises)
-      .then(() => {
-        res.
-        render("if-upload-multiple", {message:
-        "😃 Files uploaded successfully to the Database."
+      sharp(file.buffer)
+        .resize({ width: 500 })
+        .toBuffer()
+        .then((thumbnail) => {
+          const newImage = new Image({
+            filename: file.originalname,
+            contentType: file.mimetype,
+            imageBuffer: file.buffer,
+            imageBufferThumbnail: thumbnail,
+          });
+
+          return newImage.save().catch((error) => {
+            console.log(error);
+            res
+              .status(500)
+              .send(
+                "Error saving files to database. Error in Saving Operation"
+              );
+          });
         });
-    })
+    });
+
+    Promise.all(imagePromises)
+
+      .then(() => {
+        res.render("if-upload-multiple", {
+          message:
+            `😃 File uploaded successfully to the database!` ,
+        });
+      })
+
       .catch((error) => {
         console.log(error);
         res.status(500).send("Error saving files to database.");
       });
-  });
+    });
 
+
+// Upload Single image
 router
   .route("/singleimage")
   .get((req, res) => {
@@ -49,22 +69,29 @@ router
     if (!req.file) {
       return res.status(400).send("No file uploaded.");
     }
-    const newImage = new Image({
-      filename: req.file.originalname,
-      contentType: req.file.mimetype,
-      imageBuffer: req.file.buffer,
-    });
-    newImage.save()
-    .then(() => {
-      res.render("if-upload-single", {
-        message:
-          `😃 File uploaded successfully to the database!` ,
+
+    sharp(req.file.buffer)
+      .resize({ width: 500 })
+      .toBuffer()
+      .then((thumbnail) => {
+        const newImage = new Image({
+          filename: req.file.originalname,
+          contentType: req.file.mimetype,
+          imageBuffer: req.file.buffer,
+          imageBufferThumbnail: thumbnail,
+        });
+
+        return newImage.save(); // Save the image document
+      })
+      .then(() => {
+        res.render("if-upload-single", {
+          message: `😃 File uploaded successfully to the database!`,
+        });
+      })
+      .catch((error) => {
+        console.error(error); // Use console.error for proper error logging
+        res.status(500).send("Error saving file to database.");
       });
-    })
-    .catch((error) => {
-      console.error(error); // Use console.error for proper error logging
-      res.status(500).send("Error saving file to database.");
-    });
-});
+  });
 
 module.exports = router;
