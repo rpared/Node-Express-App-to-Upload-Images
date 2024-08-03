@@ -33,43 +33,36 @@ router.route("/multiple").get((req, res) => {
     title: "Fetching Multiple Random Images",
   });
 });
+
+
 //This route is triggered with js inside fetch-multiple.hbs
-router.get("/fetch-multiple2", (req, res) => {
-
-
-    let numImages = parseInt(req.query.num) || 3; // Default to 3 images
+router.get('/fetch-multiple2', (req, res) => {
+  let numImages = parseInt(req.query.num) || 3; // Default to 3 images
 
   if (numImages < 1 || numImages > 10) {
     return res.status(400).send({
       message:
-        "Invalid number of images. Please request between 2 and 10 images.",
+        'Invalid number of images. Please request between 2 and 10 images.',
     });
   }
+
   Image.aggregate([
     { $sample: { size: numImages } },
     {
-      $project: {
-        filename: Image.filename,
-        contentType: Image.contentType,
-        imageBuffer: Image.imageBufferThumbnail
-        ? Image.imageBufferThumbnail.toString("base64")
-          : "",
-          }
-        }
-    
+      $project: { imageBuffer: 0 },
+    },
   ])
-  .then((randomImages) => {
-    if (randomImages.length === 0) {
-      return res.status(404).json({ error: "No images found." });
-    }
-    res.json(randomImages); // Always return an array
-  })
-  .catch((error) => {
-    console.error("Error fetching images:", error);
-    res.status(500).json({ error: "Error fetching images." });
-  });
+    .then((randomImages) => {
+      if (randomImages.length === 0) {
+        return res.status(404).json({ error: 'No images found.' });
+      }
+      res.json(randomImages); // Always return an array
+    })
+    .catch((error) => {
+      console.error('Error fetching images:', error);
+      res.status(500).json({ error: 'Error fetching images.' });
+    });
 });
-
 
 
 

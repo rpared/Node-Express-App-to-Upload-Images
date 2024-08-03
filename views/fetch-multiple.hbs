@@ -7,7 +7,7 @@
         <button class="btn btn-primary" type="button" onclick="displayImages()">Display Images</button>
     </form>
     <div id="imageContainer"></div>
-</div>
+</div>  
 
 <script>
 function displayImages() {
@@ -21,10 +21,10 @@ function displayImages() {
           imageContainer.innerHTML = ''; // Clear any existing content
           if (Array.isArray(data) && data.length > 0) {
             data.forEach((image) => {
-              if (image.imageBuffer) {
+              if (image.imageBufferThumbnail) {
                 // Create an img element
                 const imgElement = document.createElement('img');
-                imgElement.src = `data:${image.contentType};base64,${image.imageBuffer}`;
+                imgElement.src = `data:${image.contentType};base64,${image.imageBufferThumbnail}`;
                 imgElement.alt = image.filename;
                 imgElement.style.maxWidth = '200px';
                 imgElement.style.margin = '10px';
