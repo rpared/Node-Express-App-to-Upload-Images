@@ -13,6 +13,10 @@ const upload = require("./middleware/multer");
 const mongoose = require("mongoose");
 const uploadRouter = require("./routers/upload_router");
 const fetchRouter = require("./routers/fetch_router");
+const cors = require("cors");
+
+// Enable CORS for all routes
+app.use(cors());
 
 app.set("view engine", ".hbs");
 app.set("views", path.join(__dirname, "views"));
