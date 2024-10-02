@@ -53,7 +53,7 @@ a:hover{
 
 /* Gallery */
 
-.gallery {
+/* .gallery {
     display: flex;
     flex-wrap: wrap;
   }
@@ -72,4 +72,17 @@ a:hover{
   }
   .pagination a.current {
     font-weight: bold;
+  } */
+
+
+  #imageContainer1 img {
+    max-width: 200px;
+    margin: 10px;
   }
+  #pagination {
+    margin-top: 20px;
+  }
+  #pagination button {
+    margin: 5px;
+  }
+
