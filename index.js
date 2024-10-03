@@ -16,7 +16,12 @@ const fetchRouter = require("./routers/fetch_router");
 const cors = require("cors");
 
 // Enable CORS for all routes
-app.use(cors());
+const corsOptions = {
+  origin: "*", // Allow all origins for testing
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+app.use(cors(corsOptions));
 
 app.set("view engine", ".hbs");
 app.set("views", path.join(__dirname, "views"));
