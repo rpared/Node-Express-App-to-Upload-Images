@@ -20,7 +20,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://your-production-domain.vercel.app",
+      "https://node-express-app-to-upload-git-201821-rogers-projects-cf834b0b.vercel.app/",
     ], // Allow both localhost and production
     credentials: true, // Allows cookies and credentials to be sent
     methods: "GET,OPTIONS,PATCH,DELETE,POST,PUT",
