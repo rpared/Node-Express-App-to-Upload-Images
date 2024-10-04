@@ -16,12 +16,16 @@ const fetchRouter = require("./routers/fetch_router");
 const cors = require("cors");
 
 // Enable CORS for all routes
-const corsOptions = {
-  origin: "*", // Allow all origins for testing
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: "*",
+    credentials: true,
+    methods: "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+    allowedHeaders:
+      "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
+  })
+);
+app.options("*", cors()); // Enable pre-flight requests for all routes
 
 app.set("view engine", ".hbs");
 app.set("views", path.join(__dirname, "views"));
