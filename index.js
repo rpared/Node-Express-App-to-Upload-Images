@@ -15,17 +15,21 @@ const uploadRouter = require("./routers/upload_router");
 const fetchRouter = require("./routers/fetch_router");
 const cors = require("cors");
 
-// Enable CORS for all routes
+// CORS configuration
 app.use(
   cors({
-    origin: "*",
-    credentials: true,
+    origin: [
+      "http://localhost:3000",
+      "https://your-production-domain.vercel.app",
+    ], // Allow both localhost and production
+    credentials: true, // Allows cookies and credentials to be sent
     methods: "GET,OPTIONS,PATCH,DELETE,POST,PUT",
     allowedHeaders:
       "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
   })
 );
-app.options("*", cors()); // Enable pre-flight requests for all routes
+
+app.options("*", cors()); // Enable pre-flight for all routes
 
 app.set("view engine", ".hbs");
 app.set("views", path.join(__dirname, "views"));
