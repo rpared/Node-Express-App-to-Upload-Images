@@ -3,7 +3,23 @@ const router = express.Router();
 const Image = require("../models/file");
 const multer = require("multer");
 const storage = multer.memoryStorage(); //RAM
+const cors = require("cors");
 
+// CORS configuration
+router.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://node-express-app-to-upload-git-201821-rogers-projects-cf834b0b.vercel.app/",
+    ], // Allow both localhost and production
+    credentials: true, // Allows cookies and credentials to be sent
+    methods: "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+    allowedHeaders:
+      "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
+  })
+);
+
+router.options("*", cors()); // Enable pre-flight for all routes
 
 // Fetch one random Image file as base64
 router.route("/single").get((req, res) => {
@@ -34,15 +50,14 @@ router.route("/multiple").get((req, res) => {
   });
 });
 
-
 //This route is triggered with js inside fetch-multiple.hbs
-router.get('/fetch-multiple2', (req, res) => {
+router.get("/fetch-multiple2", (req, res) => {
   let numImages = parseInt(req.query.num) || 3; // Default to 3 images
 
   if (numImages < 1 || numImages > 10) {
     return res.status(400).send({
       message:
-        'Invalid number of images. Please request between 2 and 10 images.',
+        "Invalid number of images. Please request between 2 and 10 images.",
     });
   }
 
@@ -54,18 +69,15 @@ router.get('/fetch-multiple2', (req, res) => {
   ])
     .then((randomImages) => {
       if (randomImages.length === 0) {
-        return res.status(404).json({ error: 'No images found.' });
+        return res.status(404).json({ error: "No images found." });
       }
       res.json(randomImages); // Always return an array
     })
     .catch((error) => {
-      console.error('Error fetching images:', error);
-      res.status(500).json({ error: 'Error fetching images.' });
+      console.error("Error fetching images:", error);
+      res.status(500).json({ error: "Error fetching images." });
     });
 });
-
-
-
 
 // Fetch all images
 
@@ -97,7 +109,6 @@ router.get("/fetch-all2", (req, res) => {
     });
 });
 
-
 // Fetch all images Paginated
 router.route("/gallery-pagination").get((req, res) => {
   res.render("gallery-pagination.hbs", {
@@ -121,32 +132,31 @@ router.get("/fetch-all/pages/:index", (req, res) => {
         return res.status(404).send("Page not found.");
       }
       Image.countDocuments()
-      .then((total_images) => {
-        const totalPages = Math.ceil(total_images / ITEMS_PER_PAGE);
-        const formattedPageItems = page_results.map((image) => ({
-          filename: image.filename,
-          contentType: image.contentType,
-          imageBuffer: image.imageBufferThumbnail
-            ? image.imageBufferThumbnail.toString("base64")
-            : "",
-        }));
-        const response = {
-          page: pageIndex,
-          totalPages: totalPages,
-          files: formattedPageItems,
-        };
-        res.json(response);
-      })
-      .catch((error) => {
-        console.error("Error counting Documents:", error);
-        res.status(500).send("Error fetching files.");
-      });
-  })
-  .catch((error) => {
-    console.error("Error Finding Documents:", error);
-    res.status(500).send("Error fetching files.");
-  });
+        .then((total_images) => {
+          const totalPages = Math.ceil(total_images / ITEMS_PER_PAGE);
+          const formattedPageItems = page_results.map((image) => ({
+            filename: image.filename,
+            contentType: image.contentType,
+            imageBuffer: image.imageBufferThumbnail
+              ? image.imageBufferThumbnail.toString("base64")
+              : "",
+          }));
+          const response = {
+            page: pageIndex,
+            totalPages: totalPages,
+            files: formattedPageItems,
+          };
+          res.json(response);
+        })
+        .catch((error) => {
+          console.error("Error counting Documents:", error);
+          res.status(500).send("Error fetching files.");
+        });
+    })
+    .catch((error) => {
+      console.error("Error Finding Documents:", error);
+      res.status(500).send("Error fetching files.");
+    });
 });
-
 
 module.exports = router;
